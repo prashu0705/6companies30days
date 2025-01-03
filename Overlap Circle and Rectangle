@@ -1,0 +1,49 @@
+Question Link : https://leetcode.com/problems/circle-and-rectangle-overlapping/description/
+
+Problem Description: 
+  Given a circle with radius - 'radius' and coordinates of centre - '(xCenter, yCenter)'
+  Given a rectangle with bottom left vertice coordinate - '(x1, y1)' and top right corner - '(x2, y2)'
+  We need to check if the circle touches or overlaps with the rectangle.
+
+Key Idea:
+  The circle can overlap the rectangle in following 3 ways:
+    1. The circle is inside the rectangle
+    2. The circle touches or crosses the edges of the rectangle
+    3. The circle is outside but close enough to touch one of the rectangle's corner
+  We calculate the shortest distance from the circle’s center (xCenter, yCenter) to the rectangle. If this distance is less than or equal to the 'radius' the circle overlaps with the rectangle.
+
+Finding The Closest Point:
+  For the x-coordinate of the closest point (xn):
+    If xCenter (circle’s x-coordinate) is:
+      Inside the rectangle’s horizontal range [x1,x2]: 
+        xn = xCenter.
+      Outside:
+        If xc < x1: 
+          xn = x1 (left edge).
+        If xc > x2: 
+          xn = x2 (right edge).
+    Use the formula: 
+      xn = max(x1, min(x2, xc)).
+For the y-coordinate of the closest point (yn):
+  If yCenter (circle’s y-coordinate) is:
+      Inside the rectangle’s horizontal range [y1,y2]: 
+        yn = yCenter.
+      Outside:
+        If yc < y1: 
+          yn = y1 (bottom edge).
+        If yc > y2: 
+          yn = y2 (top edge).
+    Use the formula: 
+      yn = max(y1, min(y2, yc)).
+
+Code:
+  class Solution {
+public:
+    bool checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+        int xn = max(x1, min(x2, xCenter));
+        int yn = max(y1, min(y2, yCenter));
+        return (yn - yCenter) * (yn - yCenter) + (xn - xCenter) * (xn - xCenter)  <= radius * radius;
+    }
+};
+
+Status : Revisit
