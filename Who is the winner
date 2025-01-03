@@ -1,0 +1,41 @@
+Question Link :- https://leetcode.com/problems/find-the-winner-of-the-circular-game/description/
+
+Problem Description :- 
+  In this circular game, n friends numbered from 1 to n stand in a circle. In the first round, we start counting from friend 1 and eliminate the k-th friend. In each subsequent round, counting starts from the friend immediately clockwise to the one just eliminated, and the k-th friend is eliminated again. This process repeats until only one person remains.
+
+Algorithm:-
+  Initialize a queue of size n, where the elements are labeled 1 to n.
+  While more than 1 friend is remaining
+    Remove the next k-1 friends and re-add them to the queue.
+    Remove the next friend (the k-th friend that should be eliminated in the game)
+  Return the value of the last friend remaining
+
+Code :-
+  class Solution {
+public:
+    int findTheWinner(int n, int k) {
+        // Initialize queue with n friends
+        queue<int> circle;
+        for (int i = 1; i <= n; i++) {
+            circle.push(i);
+        }
+
+        // Perform eliminations while more than 1 player remains
+        while (circle.size() > 1) {
+            // Process the first k-1 friends without eliminating them
+            for (int i = 0; i < k - 1; i++) {
+                circle.push(circle.front());
+                circle.pop();
+            }
+            // Eliminate the k-th friend
+            circle.pop();
+        }
+
+        return circle.front();
+    }
+};
+
+Status : Done
+
+
+  
