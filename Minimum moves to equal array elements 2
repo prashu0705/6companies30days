@@ -1,0 +1,39 @@
+LINK :- https://leetcode.com/problems/minimum-moves-to-equal-array-elements-ii/description/
+
+PROBLEM DESCRIPTION :- TO MAKE ARRAY ELEMENTS EQUAL BY EITHER INCREASING OR DECREASING BY 1 EVERY PASS ON EACH ELEMENT.
+
+APPROACH :-
+  1. Finding the Median:  
+     - Sort the array in ascending order.
+     - If the size of the array is odd, the median is the middle element.  
+     - If the size is even, the median is the average of the two middle elements.
+
+  2. Minimizing Moves:  
+     - Iterate through the array and calculate the sum of absolute differences between each element and the median.  
+     - The median minimizes the total moves required to make all elements equal.
+
+COMPLEXITY:
+  - Time Complexity: (O(n log n)) due to sorting.  
+  - Space Complexity: (O(1)) for in-place operations.
+
+CODE:-
+  class Solution {
+public:
+    double findMedian(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        if(n % 2 == 1){
+            return nums[n / 2];
+        } else {
+            return (nums[n / 2 - 1] + nums[n / 2]) / 2.0;
+        }
+    }
+    int minMoves2(vector<int>& nums) {
+        int median = findMedian(nums);
+        int count = 0;
+        for(int num: nums){
+            count += abs(num - median);
+        }
+        return count;
+    }
+};
