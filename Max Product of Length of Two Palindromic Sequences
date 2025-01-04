@@ -1,0 +1,87 @@
+Question Link :- https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-subsequences/description/
+
+Problem description : -
+  Return the max product of 2 palindromic disjoint subsequences formed from a single string. 
+  The two subsequences are disjoint if they do not both pick a character at the same index.
+  A subsequence is a string that can be derived from another string by deleting some or no characters without changing the order of the remaining characters. A string is palindromic if it reads the same forward and backward.
+
+Approach :-
+ func - Longest Palindromic Subsequence Length
+ The function func(string s) calculates the length of the longest palindromic subsequence in the string s.
+  Reverse the string: Create a reversed version of the string s, called s2.
+  Dynamic Programming (DP) Table Setup:
+    We initialize a 2D DP table dp of size (n+1) x (n+1), where n is the length of the string.
+    The entry dp[i][j] will store the length of the longest common subsequence (LCS) of the substrings s[0..i-1] and s2[0..j-1].
+  Filling the DP Table:
+    For each character in s and s2, if the characters match (s[i-1] == s2[j-1]), it means we have found part of the palindromic subsequence, so we increment the LCS length (dp[i][j] = dp[i-1][j-1] + 1).
+    If the characters don't match, we take the maximum of excluding the current character from either string (dp[i][j] = max(dp[i-1][j], dp[i][j-1])).
+  Return the Result: Finally, dp[n][n] will contain the length of the longest palindromic subsequence in s.
+
+  generate - Recursive Exploration of Subsequence Pairs
+  The function generate(string &s, string s1, string s2, int n, int &ans) generates all possible pairs of subsequences s1 and s2 by recursively adding characters from s to either s1 or s2.
+  Base Case: When n < 0, it means we have considered all characters of s, and we now have two subsequences s1 and s2.
+    We then calculate the longest palindromic subsequence lengths of both s1 and s2 using the func function.
+    We update the answer (ans) by checking the product of the lengths of s1 and s2 and comparing it with the current maximum (ans = max(ans, func(s1) * func(s2))).
+  Recursive Case: For each character at index n, we have two choices:
+    Add the character s[n] to s1 and recurse (generate(s, s1 + s[n], s2, n - 1, ans)).
+    Add the character s[n] to s2 and recurse (generate(s, s1, s2 + s[n], n - 1, ans)).
+  This ensures we explore all possible ways of dividing the string s into two subsequences.
+
+  maxProduct - Entry Point and Result Calculation
+  The function maxProduct(string s) is the main function that initiates the process of finding the maximum product of the lengths of two disjoint palindromic subsequences.
+  Initialization:
+    Set n = s.size(), which is the length of the input string s.
+    Initialize ans = 0 to store the maximum product.
+    Initialize s1 = "", which will be used to accumulate one of the subsequences.
+  Call to generate:
+    Call generate(s, s1, s1, n - 1, ans), where both s1 and s2 are initially empty strings. This will start the recursive exploration of all subsequence pairs.
+  Return Result
+
+Code:-
+  class Solution {
+public:
+    int func(string s){
+        string s2 = s;
+        reverse(s2.begin(), s2.end());
+        int n = s.size();
+        vector<vector<int>> dp(n+1, vector<int> (n+1, 0));
+        for(int i=0; i<=n; i++){
+            dp[i][0] = 0;
+            dp[0][i] = 0;
+        }
+
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=n; j++){
+                if(s[i-1] == s2[j-1]){
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }
+                else{
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[n][n];
+    }
+
+    void generate(string &s, string s1, string s2, int n, int &ans){
+        if(n<0){
+            ans = max(ans, func(s1)*func(s2));
+            return;
+        }
+
+        //put the current char in s1 or s2
+        generate(s, s1+s[n], s2, n-1, ans);
+        generate(s, s1, s2+s[n], n-1, ans);
+    }
+
+    int maxProduct(string s) {
+        int n= s.size();
+        int ans = 0;
+        string s1 = "";
+        generate(s, s1, s1, n-1, ans);
+        return ans; 
+    }
+}; 
+
+Status - REVISIT.
