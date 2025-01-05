@@ -1,0 +1,32 @@
+Question Link :- https://leetcode.com/problems/longest-mountain-in-array/description/
+
+Problem : Find the longest array subsequence length in which there exists one and only one peak. 
+
+Approach:
+  Create isMountain funciton that check the value if can be mountain or not
+  If this value is mountain , then check the left and right window and exapnd it when the condtiont is true .
+  Define mx to find maximum value of the expansion this two pointers for all mountain value.
+
+Code:- 
+  class Solution {
+    public:
+      bool isMountain(int a, int b, int c) {
+        return b > a && b > c;
+      }
+      int longestMountain(vector<int>& arr) {
+        int n = arr.size();
+        int mx = 0;
+        for(int i = 1; i < n - 1; i++) {
+            if(isMountain(arr[i - 1], arr[i], arr[i + 1])) {
+                int left = i - 1;
+                int right = i + 1;
+                while(left > 0 && arr[left] > arr[left - 1]) --left;
+                while(right < n - 1 && arr[right] > arr[right + 1]) right++;
+                mx = max(mx, right - left + 1);
+            }
+        }
+        return mx;
+      }
+};
+
+Status :- Done
