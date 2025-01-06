@@ -1,0 +1,46 @@
+Problem Link :- https://leetcode.com/problems/bulls-and-cows/description/
+
+Description :- If the characters of the string secret and guess match at same indices its a bull otherwise if the character in guess is in string secret but not at right position, it a cow.
+              Reeturn number of bulls and cow in the form "xAyB" where x is number of bulls(A) and y is number of cows(B).
+
+Approach:-
+  1. Declare a hash-table that calculates frequency of each character in both the strings.
+  2. Iterate through the string:
+    a. If the characters of both strings match increase the count of bulls.
+    b. Otherwise:
+      i) check if count of character in secret is less than zero. If yes, increase count of cows.
+      Increase the frequency of the character.
+      ii) check if count of character in guess is greater than zero. If yes, increase count of cows.
+      Decrease the frequency of the character.
+  3. Return the count of bulls and cows in the required format by using to_string() function.
+
+Code: -
+  class Solution {
+public:
+    string getHint(string secret, string guess) {
+        unordered_map<char, int> countMap;
+        int bulls = 0;
+        int cows = 0;
+        for(int i = 0; i < secret.length(); i++) {
+            if(secret[i] == guess[i]) {
+                bulls++;
+            } else {
+                if(countMap[secret[i]] < 0) cows++;
+                countMap[secret[i]]++;
+                if(countMap[guess[i]] > 0) cows++;
+                countMap[guess[i]]--;
+            }
+        }
+        return to_string(bulls) + 'A' + to_string(cows) + 'B';
+    }
+};
+
+Significance of 2b step:- 
+  Why countMap[secret[i]] < 0?
+    A negative value in countMap indicates that guess has seen this character more times than secret has.
+    So, if countMap[secret[i]] < 0, it means this secret[i] cancels out one unmatched occurrence from guess and contributes to a "cow."
+  Why countMap[guess[i]] > 0?
+    A positive value in countMap indicates that secret has seen this character more times than guess has.
+    So, if countMap[guess[i]] > 0, it means this guess[i] cancels out one unmatched occurrence from secret and contributes to a "cow."
+
+Status:- Could solve in two pass, so revisit and see if can solve in one pass.
