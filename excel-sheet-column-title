@@ -1,0 +1,28 @@
+Question Link :- https://leetcode.com/problems/excel-sheet-column-title/description/
+
+Problem :- Convert Column Number to column Name as in Excel
+
+Approach:-
+  Initialize an empty string
+  While the columnnumber > 0:
+    Decrement the columnNumber by 1.
+    Find the character corresponding to columnNumber % 26 and append it to the ans in the end.
+    Assign columnNumber to columnNumber / 26
+  Reverse the string columnNumber and return it.
+
+Code:- 
+  class Solution {
+  public:
+    string convertToTitle(int columnNumber) {
+        string ans;
+        while(columnNumber > 0) {
+            columnNumber--;
+            ans = ans + char((columnNumber % 26) + 'A');
+            columnNumber /= 26;
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+
+Status:- Done
