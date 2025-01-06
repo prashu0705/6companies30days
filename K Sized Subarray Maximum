@@ -1,0 +1,46 @@
+Question Link:- https://www.geeksforgeeks.org/problems/maximum-of-all-subarrays-of-size-k3101/1
+
+Problem :- Find the maximum of every k sized subarray.
+
+Approach:-
+  Step 1: Initialize Deque and Result Vector:
+    Use the deque to store indices of array elements.
+    The result vector will store the maximum values of all windows.
+  Step 2: Traverse the Array:
+    For each element arr[i]:
+      Remove Outdated Indices:
+        If the index at the front of the deque is outside the current window (dq.front()≤i−k), remove it.
+      Remove Smaller Elements:
+        Remove indices from the back of the deque if the corresponding array value (arr[dq.back()]) is smaller than or equal to the current value (arr[i]).
+      Add Current Index:
+        Add the current index i to the deque.
+      Store Maximum for the Window:
+        Once the first valid window is formed (i≥k−1), the maximum of the current window is arr[dq.front()]. Add this to the result vector.
+Step 3: Return the Result:
+  After processing all elements, the result vector contains the maximums for all subarrays of size k.
+
+Code:- 
+  class Solution {
+  public:
+    // Function to find maximum of each subarray of size k.
+    vector<int> maxOfSubarrays(vector<int>& arr, int k) {
+        int n = arr.size();
+        vector<int> result;
+        deque<int> dq;
+        for(int i = 0; i < n; i++) {
+            if(!dq.empty() && dq.front() <= i - k) {
+                dq.pop_front();
+            }
+            while (!dq.empty() && arr[dq.back()] <= arr[i]) {
+                dq.pop_back();
+            }
+            dq.push_back(i);
+            if (i >= k - 1) {
+                result.push_back(arr[dq.front()]);
+            }
+        }
+        return result;
+    }
+};
+
+Status:- Revisit
