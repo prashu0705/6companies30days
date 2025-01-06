@@ -1,0 +1,72 @@
+Question Link :- https://leetcode.com/problems/rotting-oranges/description/
+
+Approach:-
+  Initialization:
+    Count all fresh oranges (cntFreshOranges).
+    Push all rotten oranges into a queue (q) with time 0 and mark them as visited in a vis matrix.
+  Breadth-First Search (BFS):
+    Use the queue to process rotten oranges.
+    For each orange, check its 4 neighbors (up, down, left, right):
+      If the neighbor is fresh, rot it, push it into the queue with time incremented by 1, and mark it as visited.
+    Track the maximum time required (time) and count of rotten oranges (cnt).
+  Final Check:
+    If the count of rotten oranges (cnt) matches the total fresh oranges (cntFreshOranges), return time.
+    Otherwise, return -1 (not all fresh oranges can rot).
+
+Code:-
+  class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        int cntFreshOranges = 0;
+        queue<pair<pair<int, int>, int>> q;
+        int vis[n][m];
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 2){
+                    q.push({{i, j}, 0});
+                    vis[i][j] = 2;
+                }
+                else{
+                    vis[i][j] = 0;
+                }
+                if(grid[i][j] == 1){
+                    cntFreshOranges++;
+                }
+            }
+        }
+        
+        int time = 0;
+        int drow[] = {-1, 0, +1, 0};
+        int dcol[] = {0, +1, 0, -1};
+        int cnt = 0;
+        
+        // BFS to spread the rot
+        while(!q.empty()){
+            int r = q.front().first.first;
+            int c = q.front().first.second;
+            int t = q.front().second;
+            time = max(time, t);
+            q.pop();
+            
+            for(int i = 0; i < 4; i++){
+                int nrow = r + drow[i];
+                int ncol = c + dcol[i];
+                
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && vis[nrow][ncol] == 0 && grid[nrow][ncol] == 1){
+                    q.push({{nrow, ncol}, t + 1});
+                    vis[nrow][ncol] = 2; // Correctly mark as visited
+                    cnt++; // Increment rotten orange count
+                }
+            }
+        }
+        
+        // If not all fresh oranges are rotten, return -1
+        if(cnt != cntFreshOranges) return -1;
+        
+        return time;
+    }
+};
+
+Status:- Try more similar problems.
