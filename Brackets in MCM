@@ -1,0 +1,43 @@
+Question Link:- https://www.geeksforgeeks.org/problems/brackets-in-matrix-chain-multiplication1024/1
+
+Approach:-
+  Initialize DP Table: Create a 2D table dp[i][j] where each entry will store the minimum cost to multiply matrices i through j.
+  Base Case: For a single matrix, dp[i][i] = 0 because no multiplication is needed.
+  Fill the DP Table: For increasing chain lengths (from 2 to n), compute dp[i][j] for all pairs (i, j):
+  For each possible split point k between i and j, calculate the cost using the recurrence relation.
+  Update dp[i][j] with the minimum cost and also store the split point.
+  Backtrack to Get Parenthesization: After filling the DP table, backtrack using the stored split points to reconstruct the optimal parenthesization.
+
+Code:-
+ class Solution {
+  public:
+    string matrixChainOrder(vector<int> &arr) {
+       int n = arr.size();
+       vector<vector<pair<string, int>>> dp (n, vector<pair<string, int>>(n, {"", 0}));
+       for(int i = 0; i < n; i++) {
+           string temp = "";
+           temp += char('A' + i);
+           dp[i][i] = {temp, 0};
+       }
+       for (int len = 2; len < n; len++) {
+           for (int i = 0; i < n - len; i++) {
+               int j = i + len - 1;
+                int cost = INT_MAX;
+                string str;
+                for (int k = i + 1; k <= j; k++) {
+                    int currCost = dp[i][k - 1].second + dp[k][j].second + arr[i] * arr[k] * arr[j + 1];
+                    if (currCost < cost) {
+                        cost = currCost;
+                        str = "(" + dp[i][k - 1].first + 
+                        dp[k][j].first + ")";
+                    }
+                }
+                dp[i][j] = {str, cost};
+            }
+       }
+       return dp[0][n - 2].first;
+    }    
+    
+};
+
+Status :- Review
