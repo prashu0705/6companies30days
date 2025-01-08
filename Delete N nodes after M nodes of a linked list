@@ -1,0 +1,37 @@
+Question Link:- https://www.geeksforgeeks.org/problems/delete-n-nodes-after-m-nodes-of-a-linked-list/1
+
+Approach:-
+  Initialize: Start at the head of the linked list with a pointer current.
+  Skip m Nodes: Move the current pointer forward by m nodes, stopping early if you reach the end of the list.
+  Check End of List: If current becomes nullptr after skipping, stop processing.
+  Delete n Nodes:
+  Start deleting nodes from current->next up to n nodes or until the list ends.
+  Use a temporary pointer to safely delete each node.
+  Re-link the List: Link current->next to the node after the deleted nodes, ensuring the remaining list is intact.
+  Move Forward: Advance current to the node after the deleted nodes and repeat.
+  Repeat: Continue skipping and deleting nodes until you reach the end of the list.
+
+Code:-
+  class Solution {
+  public:
+    Node* linkdelete(Node* head, int n, int m) {
+        Node* current = head;
+        while(current) {
+            for(int i = 1; i < m && current; i++) {
+                current = current->next;
+            }
+            if(!current) break;
+            Node* temp = current->next;
+            for(int i = 0; i < n && temp; i++) {
+                Node* toDelete = temp;
+                temp = temp -> next;
+                delete toDelete;
+            }
+            current->next = temp;
+            current = temp;
+        }
+        return head;
+    }
+};
+
+Status:- Done
