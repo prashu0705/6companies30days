@@ -1,0 +1,51 @@
+Question Link:- https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/description/
+
+Approach:-
+  1. Make a graph out of tree
+  2. Perform BFS on it.
+
+Code:-
+  class Solution {
+public:
+    void buildGraph(TreeNode* node, TreeNode* parent, unordered_map<int, vector<int>>& graph) {
+        if (!node) return;
+
+        if (parent) {
+            graph[node->val].push_back(parent->val);
+            graph[parent->val].push_back(node->val);
+        }
+
+        buildGraph(node->left, node, graph);
+        buildGraph(node->right, node, graph);
+    }
+
+    int amountOfTime(TreeNode* root, int start) {
+        unordered_map<int, vector<int>> graph1;
+        buildGraph(root, nullptr, graph1);
+        queue<int> q;
+        q.push(start);
+        unordered_map<int, bool> infected;
+        infected[start] = true;
+        int minutes = 0;
+
+        while (!q.empty()) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                int node = q.front();
+                q.pop();
+
+                for (int neighbor : graph1[node]) {  // Use graph1 here
+                    if (!infected[neighbor]) {
+                        q.push(neighbor);
+                        infected[neighbor] = true;
+                    }
+                }
+            }
+            if (!q.empty()) minutes++;
+        }
+
+        return minutes;
+    }
+};
+
+Status:- Done
