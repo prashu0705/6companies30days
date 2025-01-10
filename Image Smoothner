@@ -1,0 +1,48 @@
+Question Link:- https://leetcode.com/problems/image-smoother/description/
+
+Approach:-
+  Initialization:
+    Create a result grid of the same size as the input grid to store the smoothed values.
+  Iterate Through the Grid:
+    For each cell, compute the sum and count of its valid neighbors (including itself).
+  Directions Array:
+    A predefined list of offsets (directions) simplifies checking all neighbors. The 0,0 offset ensures the cell itself is included.
+  Boundary Check:
+    Use if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) to ensure neighbors are within the grid bounds.
+  Update Result:
+    Compute the average of the valid cells (sum / count) and assign it to the corresponding cell in the result.
+  Return the Result:
+    After processing all cells, return the result grid.
+
+Code:-
+class Solution {
+public:
+    vector<vector<int>> imageSmoother(vector<vector<int>>& img) {
+        int rows = img.size();
+        int cols = img[0].size();
+        vector<vector<int>> result(rows, vector<int>(cols, 0));
+        vector<pair<int, int>> directions = {
+            {-1, 0}, {1, 0}, {0, -1}, {0, 1}, 
+            {-1, -1}, {-1, 1}, {1, -1}, {1, 1}, 
+            {0, 0} 
+        };
+        for(int r = 0; r < rows; r++) {
+            for(int c = 0; c < cols; c++){
+                int sum = 0; 
+                int count = 0;
+                for (auto [dr, dc] : directions) {
+                    int nr = r + dr;
+                    int nc = c + dc;
+                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+                        sum += img[nr][nc];
+                        count++;
+                    }
+                }
+                result[r][c] = sum / count;
+            }
+        }
+        return result;
+    }
+};
+
+Status:- Review
