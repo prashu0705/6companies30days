@@ -1,0 +1,41 @@
+Question Link:- https://leetcode.com/problems/wiggle-sort-ii/
+
+Approach:-
+  1. Create a copy of nums array
+  2. sort the copy
+  3. find the mid index
+  4. Have two pointers i and j intialized to end and start of the array respectively
+  5. While i >= 0:
+    a. check if the indice is odd:
+      i. change the element in nums array to nums1[mid]; (latter half)
+      ii. increment mid pointer
+    b. else:
+      i. change the element in nums array to nums1[j]; (former half)
+      ii. increment j pointer
+    c. Decrement i pointer
+
+Code:-
+  class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        vector<int> nums1(nums);
+        sort(nums1.begin(), nums1.end());
+        int j = 0;
+        int n = nums.size();
+        int i = n - 1;
+        int mid = i / 2 + 1;
+        while(i >= 0) {
+            if(i % 2 == 1) {
+                nums[i] = nums1[mid];
+                mid++;
+            } else {
+                nums[i] = nums1[j];
+                j++;
+            }
+            i--;
+        }
+    }
+};
+
+Status:- Try
+
