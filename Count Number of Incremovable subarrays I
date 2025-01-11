@@ -1,0 +1,35 @@
+Question Link:- https://leetcode.com/problems/count-the-number-of-incremovable-subarrays-i/description/
+
+Approach:-
+  Outer Loops:
+  The two outer loops i and j iterate over all possible subarrays nums[i...j].
+Loop k checks if the array remains strictly increasing after removing the subarray:
+  Last keeps track of the previous element in the filtered array.
+  If the current element is not greater than last, the condition of strictly increasing is violated, and the loop breaks.
+
+Code:-
+  class Solution {
+public:
+    int incremovableSubarrayCount(vector<int>& nums) {
+        int n = nums.size();
+        int count = 0;
+        for(int i = 0; i < n; i++) {
+           for(int j = i; j < n; j++) {
+                int last = -1;
+                bool increasing = true;
+                for(int k = 0; k < n; k++) {
+                    if(k >= i && k <= j) continue;
+                    if(last >= nums[k]) {
+                        increasing = false;
+                        break;
+                    }
+                    last = nums[k];
+                }
+                if(increasing) count++;
+            }
+        }
+        return count;
+    }
+};
+
+Status:- Review
