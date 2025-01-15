@@ -1,0 +1,41 @@
+Question Link : https://leetcode.com/problems/assign-cookies/description/
+
+Approach:
+Sort Both Arrays:
+  Sort g (children's greed factors) and s (cookie sizes) in ascending order.
+Use Two Pointers:
+  Pointer i for g (children), and j for s (cookies).
+Iterate Through Arrays:
+  If the current cookie (s[j]) satisfies the current child (g[i]), increment both i and j (child is satisfied).
+  Otherwise, increment j only (try a larger cookie for the same child).
+Count Satisfied Children:
+  Track the count of satisfied children when g[i] <= s[j].
+Return the Count:
+  Stop when either all children are satisfied or all cookies are used. Return the count.
+
+Code: 
+  class Solution {
+  public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        int gSize = g.size();
+        int sSize = s.size();
+        sort(g.begin(), g.end());
+        sort(s.begin(), s.end());
+        int count = 0;
+        int i = 0;
+        int j = 0;
+        while(i < gSize && j < sSize) {
+            if(g[i] <= s[j]) {
+                count++;
+                i++;
+                j++;
+            }
+            else {
+                j++;
+            }
+        }
+        return count;
+    }
+};
+
+Status: Done
