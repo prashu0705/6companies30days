@@ -1,0 +1,78 @@
+Question Link:- 
+
+Approach:- 
+  Data Structures Used:
+    A list<pair<int, int>>:
+      Stores key-value pairs.
+      Maintains the order of usage (front = most recently used, back = least recently used).
+  An unordered_map<int, list<pair<int, int>>::iterator>:
+    Maps a key to its corresponding position (iterator) in the list for O(1) access.
+  Constructor:
+    Initialize the cache with a fixed capacity.
+  get(int key):
+    Check if the key exists in the map:
+      If it exists:
+        Move the key-value pair to the front of the list (most recently used).
+        Return the value.
+      If it doesn't exist:
+        Return -1.
+  put(int key, int value):
+    Check if the key already exists:
+      If it exists:
+        Update its value.
+        Move the key-value pair to the front (most recently used).
+      If it doesn't exist:
+        Check if the cache is full:
+          If full, remove the least recently used (back of the list) and update the map.
+          Insert the new key-value pair at the front of the list.
+    Update the map to point to the new pair.
+  Key Operations:
+    Use splice to move elements in the list efficiently in O(1).
+    Use the map for quick lookups in O(1).
+  Time Complexity
+    get and put: O(1) (average) due to efficient map and list operations.
+Code:-
+  class LRUCache {
+public:
+    int capacity;
+    list<pair<int, int>> cache;
+    unordered_map<int, list<pair<int, int>>::iterator> map;
+    LRUCache(int capacity) {
+        this->capacity = capacity;
+    }
+    
+    int get(int key) {
+        if(map.find(key) == map.end()) {
+            return -1;
+        }
+        auto it = map[key];
+        cache.splice(cache.begin(), cache, it);
+        return it->second;
+        
+    }
+    
+    void put(int key, int value) {
+        if (map.find(key) != map.end()) {
+            auto it = map[key];
+            it->second = value;
+            cache.splice(cache.begin(), cache, it);
+            return;
+        }
+        if (cache.size() == capacity) {
+            auto lru = cache.back();
+            map.erase(lru.first); 
+            cache.pop_back(); 
+        }
+        cache.emplace_front(key, value);
+        map[key] = cache.begin();
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+Status:- MUST REVIEW
