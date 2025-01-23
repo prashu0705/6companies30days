@@ -1,0 +1,43 @@
+LINK:- https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/description/
+
+CODE:- 
+  class Solution {
+private: 
+    int solveSO(vector<int> &prices,int k)
+    {
+        int n=prices.size();
+        vector<int> curr(2*k+1,0);
+        vector<int> next(2*k+1,0);
+
+
+        for(int index=n-1;index>=0;index--)
+        {
+            for(int opnum=0;opnum<2*k;opnum++)
+            {
+                int profit=0;
+
+                if(opnum%2==0)
+                    {
+                       //buy allowed
+                       int buykaro=-prices[index]+next[opnum+1];
+                       int skipkaro=0+next[opnum];
+                       profit=max(buykaro,skipkaro);            
+                    }else
+                    {
+                       //sell allowed
+                       int sellkaro=+prices[index]+next[opnum+1];
+                       int ignorekaro=0+next[opnum];
+                       profit=max(sellkaro,ignorekaro);            
+                    }
+                       curr[opnum]=profit;
+            }
+            next=curr;
+        }
+
+        return next[0];
+    }    
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        return solveSO(prices,k);
+    }
+};
