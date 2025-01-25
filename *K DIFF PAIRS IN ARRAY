@@ -1,0 +1,89 @@
+LINK:-
+
+CODE:-
+  //Custom hash function for pairs
+struct pair_hash {
+
+    //Generalizing the function:
+    template <typename T1, typename T2>
+
+    //Operator overloading:
+    size_t operator()(const pair<T1, T2>& p) const {
+
+        //Obtaining the hash value of first element of pair:
+        auto h1 = hash<T1>{}(p.first);
+
+        //Obtaining the hash value of second element of the pair:
+        auto h2 = hash<T2>{}(p.second);
+
+        //Combining the hash value for the pair and returning the combined value:
+        return h1 ^ (h2 << 1); 
+    }
+};
+
+class Solution {
+public:
+    int findPairs(vector<int>& nums, int k){
+
+        //Obtaining the size of the array:
+        int n = nums.size();
+
+        //Sorting the array:
+        sort(nums.begin(),nums.end());
+
+        //Creating two pointers to keep the track of window:
+        int i = 0;
+        int j = 0;
+
+        //Creating a variable to keep the track of number of K-difference pairs:
+        int k_pairs = 0;
+
+        //Untill our window reaches the end:
+        while(j < n){
+
+            //If the difference is more than k:
+            if(abs(nums[j]-nums[i]) > k){
+
+                //Untill the difference becomes k or less:
+                while(i < j && abs(nums[j]-nums[i]) > k){
+
+                    //Increasing the ith pointer:
+                    i++;
+                }
+            }
+
+            //If the difference is equal to k:
+            if(abs(nums[j]-nums[i]) == k && i < j){
+
+                //Updating the number of pairs with difference k:
+                k_pairs++;
+            }
+
+            //Obtaining the jth element:
+            int temp = nums[j];
+
+            //Creating a variable to keep the track of frequency of temp:
+            int temp_freq = 0;
+
+            //Incrementing untill next unique element:
+            while(j < n && nums[j]==temp){
+
+                //Increasing jth pointer:
+                j++;
+
+                //Increasing frequency:
+                temp_freq++;
+            }
+
+            //If the frequency is greater than 1:
+            if(temp_freq > 1 && k==0){
+
+                //Increasing a pair:
+                k_pairs++;
+            }
+        }
+
+        //Returning the k_difference pairs:
+        return k_pairs;
+    }
+};
